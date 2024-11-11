@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'admission</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Style de base */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #500303;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #333;
+    padding: 20px;
+}
+
+/* Logo */
+.logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo img {
+    width: 90%;
+    max-width: 300px; /* Limite la taille sur les écrans plus grands */
+    opacity: 1.5;
+}
+
+/* Conteneur du formulaire */
+.container {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 800px;
+    padding: 40px;
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column; /* Organiser les éléments verticalement */
+    gap: 20px; /* Espace entre les éléments */
+}
+
+.item {
+    flex: 1 1 300px; /* Ajustement automatique en fonction de la taille de l'écran */
+    margin: 10px;
+}
+
+/* Header et titre */
+h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Etapes du formulaire */
+.step {
+    display: none;
+    transition: all 0.5s ease-in-out;
+}
+
+.step.active {
+    display: block;
+}
+
+/* Champs du formulaire */
+input, select, textarea {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* Boutons */
+.btn {
+    width: 48%;
+    padding: 12px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn.prev {
+    background-color: #6c757d;
+}
+
+.btn.prev:hover {
+    background-color: #5a6268;
+}
+
+/* Container des boutons */
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Progress bar */
+.progress-bar {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.progress-bar div {
+    height: 4px;
+    width: 0%;
+    background-color: #007BFF;
+    transition: width 0.5s;
+}
+
+
+
+.progress-bar span {
+    position: absolute;
+    top: -20px;
+    left: calc(33% * var(--step));
+    background-color: #007BFF;
+    padding: 5px 10px;
+    border-radius: 50%;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* Message de succès */
+.success-message {
+    display: none;
+    text-align: center;
+    padding: 20px;
+}
+
+.success-message .icon-check {
+    font-size: 4em;
+    color: #28a745;
+    margin-bottom: 20px;
+    animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+}
+
+/* Footer */
+footer {
+    margin-top: 50px;
+    background-color: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: #6c757d;
+    box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
+}
+.note {
+    background-color: #e7f3fe;
+    color: #31708f;
+    padding: 15px;
+    border-left: 5px solid #31708f;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+}
+footer p {
+    margin: 5px 0;
+}
+
+footer a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive styles pour tablettes */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .btn {
+        width: 100%; /* Boutons en pleine largeur pour petits écrans */
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+/* Responsive styles pour petits écrans (mobiles) */
+@media (max-width: 480px) {
+    h2 {
+        font-size: 20px;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    .btn {
+        width: 100%; /* Pleine largeur sur mobile */
+    }
+
+}
+.form-step {
+    display: none;
+}
+.btn-next,
+        .btn-prev,
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-next:hover,
+        .btn-prev:hover,
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+            color: #555;
+          }
+        
+          /* Style des éléments select */
+          select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 1em;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            appearance: none;
+            background-color: #fff;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23333'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 18px;
+            transition: all 0.3s ease;
+          }
+        
+          /* Hover et focus pour les select */
+          select:hover {
+            border-color: #999;
+            background-color: #f0f0f0;
+          }
+        
+          select:focus {
+            outline: none;
+            border-color: #0073e6;
+            box-shadow: 0 0 5px rgba(0, 115, 230, 0.5);
+            background-color: #f9f9ff;
+          }
+        
+          /* Style du bouton de soumission */
+          button[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #0073e6;
+            color: #fff;
+            font-size: 1em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+          }
+        
+          button[type="submit"]:hover {
+            background-color: #005bb5;
+          }
+
+    </style>
+</head>
+<body class="item">
+
+<div class="container" id="formContainer">
+    <div class="logo">
+        <img src="logo.png" alt="Logo de l'entreprise"> 
+    </div>
+    <div class="progress-bar">
+        <div id="progress"></div>
+        <span style="--step: 0;">1</span>
+    </div>
+
+    <h2>Formulaire de Demande d'admission - Étape <span id="stepNumber">1</span></h2>
+    
+    <form id="admissionForm" onsubmit="handleFormSubmit(event)">
+
+        <!-- Étape 1: Informations Personnelles -->
+        <div class="form-step" id="step-1" style="display:block;">
+            <h2>Étape 1: Informations Personnelles</h2>
+            <div class="note">**Veuillez vous assurer de remplir le formulaire avec vos informations exactes**</div>
+            <div class="form-group">
+                <label for="nom">Nom Complet</label>
+                <input type="text" id="nom" name="nom" required>
+            </div>
+            <div class="form-group">
+                <label for="dateNaissance">Date de Naissance</label>
+                <input type="date" id="dateNaissance" name="dateNaissance" required>
+            </div>
+            <div class="form-group">
+                <label for="sexe">Sexe</label>
+                <select id="sexe" name="sexe" required>
+                    <option value="">Sélectionner</option>
+                    <option value="homme">Homme</option>
+                    <option value="femme">Femme</option>
+                    <option value="autre">Autre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nationalite">Nationalité</label>
+                <input type="text" id="nationalite" name="nationalite" required>
+            </div>
+            <div class="form-group">
+                <label for="adresse">Adresse Postale</label>
+                <input type="text" id="adresse" name="adresse" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="telephone">Téléphone</label>
+                <input type="tel" id="telephone" name="telephone" required>
+            </div>
+            <button type="button" class="btn-next" onclick="nextStep(1)">Suivant</button>
+        </div>
+
+        <!-- Étape 2: Parcours Académique -->
+        <div class="form-step" id="step-2">
+            <h2>Étape 2: Parcours Académique</h2>
+            <div class="form-group">
+                <label for="etablissement">Établissement Actuel ou Établissement du dernier diplôme obtenu
+                </label>
+                <input type="text" id="etablissement" name="etablissement" required>
+            </div>
+            <div class="form-group">
+                <label for="diplome">Diplôme Visé ou obtenu</label>
+                <select required>
+                    <option value="">sélectionner</option>
+                    <option value="baccalauréat">BACCALAUREAT</option>
+                    <option value="licence">LICENCE</option>
+                    <option value="master">MASTER</option>
+
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="releves">Relevés de Notes des deux dernières années (Document clair et visible)</label>
+                <input type="file" id="releves" name="releves" accept=".pdf,.doc,.docx" required>
+            </div>
+            <button type="button" class="btn-prev" onclick="prevStep(2)">Retour</button>
+            <button type="button" class="btn-next" onclick="nextStep(2)">Suivant</button>
+        </div>
+
+        <!-- Étape 3: Expérience et Activités -->
+        <div class="form-step" id="step-3">
+            <h2>Étape 3: Expérience et Activités Parascolaires</h2>
+            <div class="form-group">
+                <label for="experience">Expérience Professionnelle</label>
+                <textarea id="experience" name="experience" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="activites">Activités Extrascolaires</label>
+                <textarea id="activites" name="activites" rows="4" required></textarea>
+            </div>
+            <button type="button" class="btn-prev" onclick="prevStep(3)">Retour</button>
+            <button type="button" class="btn-next" onclick="nextStep(3)">Suivant</button>
+        </div>
+
+        <!-- Étape 4: Compétences Linguistiques -->
+        <div class="form-step" id="step-4">
+            <h2>Étape 4: Compétences Linguistiques</h2>
+            <div class="form-group">
+                <label for="langues">Langues Maîtrisées</label>
+                <textarea id="langues" name="langues" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="certifLangue">Certificat de Langue (ex: TOEFL, IELTS)  Facultatif</label>
+                <input type="file" id="certifLangue" name="certifLangue" accept=".pdf,.doc,.docx">
+            </div>
+             <div class="form-group">
+                <label for="recommandation">Lettre de Recommandation</label>
+                <input type="file" id="recommandation" name="recommandation" accept=".pdf,.doc,.docx" required>
+            </div>
+            <button type="button" class="btn-prev" onclick="prevStep(4)">Retour</button>
+            <button type="button" class="btn-next" onclick="nextStep(4)">Suivant</button>
+        </div>
+
+        <!-- Étape 5: Recommandations -->
+        <div class="form-step" id="step-5">
+            <h2>Étape 5: Choix du programme et de la faculté souhaité</h2>
+            <!-- Sélection de la Faculté -->
+            <label for="faculte">Choisissez une faculté :</label>
+            <select id="faculte" name="faculte" required>
+              <option value="">--Sélectionnez une faculté--</option>
+              <option value="sciences-humaines">Faculté des Sciences Humaines</option>
+              <option value="sciences-naturelles">Faculté des Sciences Naturelles</option>
+              <option value="ingenierie">Faculté d'Ingénierie</option>
+              <option value="droit">Faculté de Droit</option>
+              <option value="medecine">Faculté de Médecine</option>
+              <option value="business">Faculté de Business (Graduate School of Business)</option>
+              <option value="education">Faculté d'Éducation (Graduate School of Education)</option>
+            </select>
+          
+            <!-- Sélection du Programme -->
+            <label for="programme">Choisissez un programme :</label>
+            <select id="programme" name="programme" required>
+              <option value="">--Sélectionnez un programme--</option>
+          
+              <!-- Programmes des Sciences Humaines -->
+              <optgroup label="Sciences Humaines">
+                <option value="litterature-comparee">Littérature Comparée</option>
+                <option value="histoire">Histoire</option>
+                <option value="philosophie">Philosophie</option>
+                <option value="sociologie">Sociologie</option>
+                <option value="anthropologie">Anthropologie</option>
+              </optgroup>
+          
+              <!-- Programmes des Sciences Naturelles -->
+              <optgroup label="Sciences Naturelles">
+                <option value="biologie">Biologie</option>
+                <option value="chimie">Chimie</option>
+                <option value="physique">Physique</option>
+                <option value="mathematiques">Mathématiques</option>
+                <option value="geologie">Géologie</option>
+              </optgroup>
+          
+              <!-- Programmes d'Ingénierie -->
+              <optgroup label="Ingénierie">
+                <option value="informatique">Informatique</option>
+                <option value="electrique">Génie Électrique</option>
+                <option value="mecanique">Génie Mécanique</option>
+                <option value="civil">Génie Civil</option>
+                <option value="bioingenierie">Bioingénierie</option>
+              </optgroup>
+          
+              <!-- Programmes de Droit -->
+              <optgroup label="Droit">
+                <option value="jd">Juris Doctor (JD)</option>
+                <option value="llm">Master of Laws (LL.M.)</option>
+                <option value="sjd">Doctorat en Droit (S.J.D.)</option>
+              </optgroup>
+          
+              <!-- Programmes de Médecine -->
+              <optgroup label="Médecine">
+                <option value="md">Doctorat en Médecine (MD)</option>
+                <option value="biomedecine">Études Biomédicales</option>
+                <option value="sante-publique">Santé Publique</option>
+                <option value="neurosciences">Neurosciences</option>
+              </optgroup>
+          
+              <!-- Programmes de Business -->
+              <optgroup label="Business">
+                <option value="mba">Master of Business Administration (MBA)</option>
+                <option value="msx">Master of Science in Management (MSx)</option>
+                <option value="phd-business">Doctorat en Business</option>
+              </optgroup>
+          
+              <!-- Programmes d'Éducation -->
+              <optgroup label="Éducation">
+                <option value="ma-education">Master en Éducation (M.A.)</option>
+                <option value="phd-education">Doctorat en Éducation</option>
+                <option value="policy-leadership">Policy, Organization, and Leadership Studies (POLS)</option>
+              </optgroup>
+            </select>
+            <button type="button" class="btn-prev" onclick="prevStep(5)">Retour</button>
+            <button type="submit" class="btn-submit" onclick="paiement.html">soumettre et continuer</button>
+        </div>
+       
+
+       
+    </form>
+</div>
+
+<!-- Message de succès -->
+<div class="success-message" id="successMessage">
+    <div class="icon-check">✔️</div>
+    <h1>Succès !</h1>
+    <p>Votre demande a été soumise avec succès.</p>
+    <button class="continue-btn" id="continueButton">Continuer</button>
+</div>
+
+<footer>
+    <p>&copy; 2024 Stanford University. Tous droits réservés.</p>
+    <p><a href="#">Politique de Confidentialité</a> | <a href="#">Conditions d'Utilisation</a></p>
+</footer>
+
+<script>
+    function handleFormSubmit(event) {
+        event.preventDefault(); // Empêche l'envoi du formulaire par défaut
+
+        // Ajoutez ici toute logique de validation ou de traitement si nécessaire
+
+        // Redirection vers une autre page après la soumission
+        window.location.href = "PAIEMENT.html"; // Remplacez par l'URL de votre page de redirection
+    }
+    let currentStep = 1;
+
+    function nextStep(step) {
+        if (validateStep(step)) {
+            document.getElementById(`step-${step}`).style.display = 'none';
+            currentStep++;
+            document.getElementById(`step-${currentStep}`).style.display = 'block';
+        }
+    }
+
+    function prevStep(step) {
+        document.getElementById(`step-${step}`).style.display = 'none';
+        currentStep--;
+        document.getElementById(`step-${currentStep}`).style.display = 'block';
+    }
+
+    function validateStep(step) {
+        const formStep = document.getElementById(`step-${step}`);
+        const inputs = formStep.querySelectorAll('input, textarea');
+        let valid = true;
+
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                valid = false;
+                input.reportValidity();
+            }
+        });
+
+        return valid;
+    }
+    
+</script>
+
+</body>
+</html>
